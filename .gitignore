@@ -1,0 +1,6 @@
+*.json
+obj
+Properties
+bin
+.vs
+*.sln
