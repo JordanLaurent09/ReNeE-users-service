@@ -1,9 +1,12 @@
-﻿namespace users_service.Database.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace users_service.Database.Entities
 {
     public class User
     {
         public int Id { get; set; }
 
+        [Required]
         public string? Login { get; set; }
 
         public string? FirstName { get; set; }
