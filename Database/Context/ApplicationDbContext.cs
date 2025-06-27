@@ -12,9 +12,22 @@ namespace users_service.Database.Context
             Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseNpgsql(@"Host=localhost;Username=maykl;Password=sandman;Database=users_db");
+        //}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            optionsBuilder.UseNpgsql(@"Host=localhost;Username=maykl;Password=sandman;Database=users_db");
+            modelBuilder
+                .Entity<User>()
+                .Property(e => e.RegisterTime)
+                .HasDefaultValueSql("now()");
+
+            modelBuilder
+                .Entity<User>()
+                .Property(e => e.LastVisit)
+                .HasDefaultValueSql("now()");
         }
     }
 }
