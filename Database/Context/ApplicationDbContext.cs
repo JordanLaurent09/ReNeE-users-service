@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Data.SqlTypes;
 using users_service.Database.Entities;
 
 namespace users_service.Database.Context
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> users { get; set; }
 
         public ApplicationDbContext(DbContextOptions options): base(options)
         {
@@ -19,15 +21,12 @@ namespace users_service.Database.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-                .Entity<User>()
-                .Property(e => e.RegisterTime)
-                .HasDefaultValueSql("now()");
-
-            modelBuilder
-                .Entity<User>()
-                .Property(e => e.LastVisit)
-                .HasDefaultValueSql("now()");
+            base.OnModelCreating(modelBuilder);
+          
+            modelBuilder.
+                Entity<User>()
+                .Property(e => e.Sex)
+                .HasConversion(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.EnumToStringConverter<Sex>());           
         }
     }
 }

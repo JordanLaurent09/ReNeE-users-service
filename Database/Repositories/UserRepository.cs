@@ -1,4 +1,5 @@
-﻿using users_service.Database.Context;
+﻿using Npgsql;
+using users_service.Database.Context;
 using users_service.Database.Entities;
 using users_service.Database.Repositories.Interfaces;
 
@@ -16,22 +17,29 @@ namespace users_service.Database.Repositories
 
         public string CreateNew(User entity)
         {
-            User? foundUserWithEmail = _context.Users.FirstOrDefault(u => u.Email == entity.Email);
+            entity.RegisterTime = DateTime.UtcNow;
+            entity.LastVisit = DateTime.UtcNow;
 
-            User? foundUserWithLogin = _context.Users.FirstOrDefault(entity => entity.Login == entity.Login);
+            User? foundUserWithEmail = _context.users.FirstOrDefault(u => u.Email == entity.Email);
+
+            User? foundUserWithLogin = _context.users.FirstOrDefault(u => u.Login == entity.Login);
+     
 
             if (foundUserWithEmail != null && foundUserWithLogin is null)
             {
                 return "Пользователь с таким адресом уже существует!";
             }
-            else if (foundUserWithEmail is null && foundUserWithLogin != null)
+            else if (foundUserWithLogin != null && foundUserWithEmail is null)
             {
                 return "Пользователь с таким логином уже существует!";
             }
-
-            else
+            else if (foundUserWithEmail != null && foundUserWithLogin != null)
             {
-                _context.Users.Add(entity);
+                return "Пользователь с такми логином и паролем уже существует!";
+            }
+            else
+            {   
+                _context.users.Add(entity);
                 _context.SaveChanges();
                 return "Пользователь успешно зарегистрирован";
             }                         
@@ -39,21 +47,21 @@ namespace users_service.Database.Repositories
 
         public void Delete(int id)
         {
-            User? user = _context.Users.FirstOrDefault(u => u.Id == id);
+            User? user = _context.users.FirstOrDefault(u => u.Id == id);
             if (user is null) return;
 
-            _context.Users.Remove(user);
+            _context.users.Remove(user);
             _context.SaveChanges();
         }
 
         public IEnumerable<User> GetAll()
         {
-            return _context.Users;
+            return _context.users;
         }
 
         public User GetByCredentials(string credential, string password)
         {
-            User? user = _context.Users.FirstOrDefault(u => u.Email == credential || u.Login == credential);
+            User? user = _context.users.FirstOrDefault(u => u.Email == credential || u.Login == credential);
 
             if (user is null) return new User();
 
@@ -62,7 +70,7 @@ namespace users_service.Database.Repositories
 
         public User GetById(int id)
         {
-            User? user = _context.Users.FirstOrDefault(u => u.Id == id);
+            User? user = _context.users.FirstOrDefault(u => u.Id == id);
 
             if (user is null) return new User();
 

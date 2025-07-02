@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using users_service.Database.Context;
 using users_service.Database.Entities;
 using users_service.Database.Repositories;
@@ -10,8 +11,9 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(@"Host=localhost:6433;Username=maykl;Password=sandman;Database=users_db");
+    options.UseNpgsql(@"Host=localhost:6433;Port=5432;Username=maykl;Password=sandman;Database=users_db");
 });
+
 
 builder.Services.AddControllers();
 
