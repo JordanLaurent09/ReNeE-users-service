@@ -61,7 +61,7 @@ namespace users_service.Database.Repositories
 
         public User GetByCredentials(string credential, string password)
         {
-            User? user = _context.users.FirstOrDefault(u => u.Email == credential || u.Login == credential);
+            User? user = _context.users.FirstOrDefault(u => (u.Email == credential || u.Login == credential) && u.Password == password);
 
             if (user is null) return new User();
 
