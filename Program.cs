@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using System.Reflection;
+using System.Text.Json.Serialization;
 using users_service.Database.Context;
 using users_service.Database.Entities;
 using users_service.Database.Repositories;
@@ -14,8 +16,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(@"Host=localhost:6433;Port=5432;Username=maykl;Password=sandman;Database=users_db");
 });
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
-builder.Services.AddControllers();
+//builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    string xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 builder.Services.AddScoped<IRepository<User, string>, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -23,6 +35,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 WebApplication app = builder.Build();
 
 app.MapControllers();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapGet("/", () => "Hello World!");
 

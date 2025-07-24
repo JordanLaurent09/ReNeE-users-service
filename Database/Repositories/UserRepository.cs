@@ -1,4 +1,4 @@
-﻿using Npgsql;
+﻿using Microsoft.EntityFrameworkCore;
 using users_service.Database.Context;
 using users_service.Database.Entities;
 using users_service.Database.Repositories.Interfaces;
@@ -78,10 +78,14 @@ namespace users_service.Database.Repositories
          
         }
 
-        public void Update(User entity)
+        public async Task Update(User entity)
         {
-            _context.Update(entity);
-            _context.SaveChanges();
+            entity.RegisterTime = entity.RegisterTime.ToUniversalTime();
+            entity.LastVisit = entity.LastVisit.ToUniversalTime();
+                      
+            _context.Entry(entity).State = EntityState.Modified;
+           
+            await _context.SaveChangesAsync();
         }
     }
 }

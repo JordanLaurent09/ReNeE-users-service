@@ -10,7 +10,7 @@
 
         string CreateNew(T entity);
 
-        void Update(T entity);
+        Task Update(T entity);
 
         void Delete(int id);
 

@@ -26,7 +26,8 @@ namespace users_service.Database.Context
             modelBuilder.
                 Entity<User>()
                 .Property(e => e.Sex)
-                .HasConversion(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.EnumToStringConverter<Sex>());           
+                .HasConversion(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.EnumToStringConverter<Sex>());
+            
         }
     }
 }
