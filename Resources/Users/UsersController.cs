@@ -50,7 +50,14 @@ namespace users_service.Resources.Users
         [Route("{id:int}")]
         public IActionResult GetById(int id)
         {
-            return Ok(_userService.GetById(id));
+            User user = _userService.GetById(id);
+
+            if (user.Id != 0)
+            {
+                return Ok(_userService.GetById(id));
+            }
+            else return NotFound($"User with id={id} has not found");
+            
         }
 
         /// <summary>
@@ -109,8 +116,20 @@ namespace users_service.Resources.Users
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("new")]
         public IActionResult AddNew([FromBody] User newUser)
-        {                      
-            return Ok(_userService.CreateUser(newUser));
+        {
+            if (newUser == null)
+            {
+                return BadRequest("User's data hasn't provided");
+            }
+            string result = _userService.CreateUser(newUser);            
+            if (result != "Пользователь успешно зарегистрирован")
+            {
+                return Ok(result);
+            } 
+            else
+            {               
+                return Created("", newUser);
+            }                          
         }
 
 
@@ -130,9 +149,17 @@ namespace users_service.Resources.Users
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("{id:int}")]
         public IActionResult DeleteById(int id)
-        {
-            _userService.DeleteUser(id);
-            return Ok("User deleted successfully");
+        {           
+            try
+            {
+                _userService.DeleteUser(id);
+                return Ok("User deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Exception occured: {ex.StackTrace}");
+            }
+            
         }
 
 
@@ -166,8 +193,20 @@ namespace users_service.Resources.Users
         [Route("change-info")]
         public IActionResult Update([FromBody] User changedEntity)
         {
-            _userService.UpdateUser(changedEntity);
-            return Ok("User has been updated successfully");
+            if (changedEntity == null)
+            {
+                return BadRequest("User's data hasn't provided");
+            }
+            try
+            {
+                _userService.UpdateUser(changedEntity);
+                return Ok("User has been updated successfully");
+            }
+            catch
+            {
+                return NotFound("User has not found");
+            }
+            
         }
 
     }

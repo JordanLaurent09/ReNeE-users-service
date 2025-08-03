@@ -5,10 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>users_service</RootNamespace>
-	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NLog.Targets.Seq" Version="4.0.2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="6.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.1" />
     <PackageReference Include="Npgsql.NodaTime" Version="9.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />

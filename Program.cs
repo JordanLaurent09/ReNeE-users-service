@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using NLog;
+using NLog.Web;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using users_service.Database.Context;
@@ -8,6 +9,10 @@ using users_service.Database.Repositories;
 using users_service.Database.Repositories.Interfaces;
 using users_service.Resources.Users;
 using users_service.Resources.Users.Interfaces;
+
+
+Logger logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +27,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
-//builder.Services.AddEndpointsApiExplorer();
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
+
 builder.Services.AddSwaggerGen(options =>
 {
     string xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

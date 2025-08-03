@@ -35,7 +35,7 @@ namespace users_service.Database.Repositories
             }
             else if (foundUserWithEmail != null && foundUserWithLogin != null)
             {
-                return "Пользователь с такми логином и паролем уже существует!";
+                return "Пользователь с такми логином и адресом уже существует!";
             }
             else
             {   
@@ -47,16 +47,16 @@ namespace users_service.Database.Repositories
 
         public void Delete(int id)
         {
-            User? user = _context.users.FirstOrDefault(u => u.Id == id);
-            if (user is null) return;
-
+            User? user = _context.users.FirstOrDefault(u => u.Id == id) ?? throw new Exception("Specified user not found");
+            
             _context.users.Remove(user);
             _context.SaveChanges();
         }
 
         public IEnumerable<User> GetAll()
         {
-            return _context.users;
+            IEnumerable<User> users = _context.users;
+            return users;
         }
 
         public User GetByCredentials(string credential, string password)
@@ -80,6 +80,8 @@ namespace users_service.Database.Repositories
 
         public async Task Update(User entity)
         {
+            User? user = _context.users.FirstOrDefault(u => u.Id == entity.Id) ?? throw new Exception("Specified user not found");
+
             entity.RegisterTime = entity.RegisterTime.ToUniversalTime();
             entity.LastVisit = entity.LastVisit.ToUniversalTime();
                       
