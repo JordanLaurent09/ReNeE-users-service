@@ -6,3 +6,4 @@ bin
 *.sln
 nlog.config
 Logs
+Dockerfile
