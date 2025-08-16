@@ -18,7 +18,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(@"Host=localhost:6433;Port=5432;Username=maykl;Password=sandman;Database=users_db");
+    options.UseNpgsql(@"Host=postgresDb-users;Username=maykl;Password=sandman;Database=users_db");
 });
 
 builder.Services.AddControllers()
