@@ -8,6 +8,7 @@ namespace users_service.Database.Context
     public class ApplicationDbContext : DbContext
     {
         public DbSet<User> users { get; set; }
+        public DbSet<UsersPerformers> usersPerformers { get; set; }
 
         public ApplicationDbContext(DbContextOptions options): base(options)
         {
@@ -27,7 +28,11 @@ namespace users_service.Database.Context
                 Entity<User>()
                 .Property(e => e.Sex)
                 .HasConversion(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.EnumToStringConverter<Sex>());
-            
+
+            modelBuilder.
+                Entity<User>()
+                .Property(e => e.Role)
+                .HasConversion(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.EnumToStringConverter<Role>());
         }
     }
 }

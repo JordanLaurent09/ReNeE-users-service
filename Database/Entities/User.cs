@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace users_service.Database.Entities
@@ -24,6 +25,9 @@ namespace users_service.Database.Entities
         [Column("sex")]
         public Sex Sex { get; set; }
 
+        [Column("role")]
+        public Role Role { get; set; }
+
         // На первое время
         [Column("password")]
         public string? Password { get; set; }
@@ -37,13 +41,14 @@ namespace users_service.Database.Entities
 
         public User () { }
 
-        public User(string? login, string? firstName, string? lastName, string? email, Sex sex, string? password, DateTime registerTime, DateTime lastVisit)
+        public User(string? login, string? firstName, string? lastName, string? email, Sex sex, Role role, string? password, DateTime registerTime, DateTime lastVisit)
         {
             Login = login;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Sex = sex;
+            Role = role;
             Password = password;
             RegisterTime = registerTime;
             LastVisit = lastVisit;

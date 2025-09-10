@@ -78,7 +78,7 @@ namespace users_service.Resources.Users
         /// <response code="400">If entity is null</response>
         /// <response code="404">If specific user not found</response>
         /// <response code="500">If server error occurs</response>
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
