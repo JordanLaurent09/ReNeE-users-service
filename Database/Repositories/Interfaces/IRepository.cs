@@ -1,12 +1,12 @@
 ﻿namespace users_service.Database.Repositories.Interfaces
 {
-    public interface IRepository<T, U>
+    public interface IRepository<T>
     {
         IEnumerable<T> GetAll();
 
         T GetById(int id);
 
-        T GetByCredentials(U credential, string password);
+        //T GetByCredentials(U credential, string password);
 
         string CreateNew(T entity);
 

@@ -12,10 +12,12 @@ namespace users_service.Resources.Users
     public class UsersController : Controller
     {
         private IUserService _userService;
+        private IUsersPerformersService _usersPerformersService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IUsersPerformersService usersPerformersService)
         {
             _userService = userService;
+            _usersPerformersService = usersPerformersService;
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace users_service.Resources.Users
                 return Ok(_userService.GetById(id));
             }
             else return NotFound($"User with id={id} has not found");
-            
+
         }
 
         /// <summary>
@@ -85,7 +87,7 @@ namespace users_service.Resources.Users
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("login")]
         public IActionResult GetByCredential([FromBody] CredentialsDTO credentialsDTO)
-        {           
+        {
             return Ok(_userService.GetByCredentials(credentialsDTO.Credential, credentialsDTO.Password));
         }
 
@@ -121,15 +123,15 @@ namespace users_service.Resources.Users
             {
                 return BadRequest("User's data hasn't provided");
             }
-            string result = _userService.CreateUser(newUser);            
+            string result = _userService.CreateUser(newUser);
             if (result != "Пользователь успешно зарегистрирован")
             {
                 return Ok(result);
-            } 
+            }
             else
-            {               
+            {
                 return Created("", newUser);
-            }                          
+            }
         }
 
 
@@ -149,7 +151,7 @@ namespace users_service.Resources.Users
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("{id:int}")]
         public IActionResult DeleteById(int id)
-        {           
+        {
             try
             {
                 _userService.DeleteUser(id);
@@ -159,7 +161,7 @@ namespace users_service.Resources.Users
             {
                 return BadRequest($"Exception occured: {ex.StackTrace}");
             }
-            
+
         }
 
 
@@ -206,8 +208,27 @@ namespace users_service.Resources.Users
             {
                 return NotFound("User has not found");
             }
-            
+
         }
 
+        // Routes for performers of every user
+
+        [HttpPost]
+        [Route("performer")]
+        public IActionResult AddFavoritePerformer([FromBody] UsersPerformers entity)
+        {
+            string result = _usersPerformersService.CreateNew(entity);
+
+            return Created("", entity);
+        }
+
+        [HttpGet]
+        [Route("performers/{userId:int}")]
+        public IActionResult GetPerfIndexes(int userId)
+        {
+            IEnumerable<int> indexes = _usersPerformersService.GetUserPerformersId(userId);
+
+            return Ok(indexes);
+        }
     }
 }

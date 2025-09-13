@@ -5,7 +5,7 @@ using users_service.Database.Repositories.Interfaces;
 
 namespace users_service.Database.Repositories
 {
-    public class UserRepository : IRepository<User, string>
+    public class UserRepository : IRepository<User>
     {
         private readonly ApplicationDbContext _context;
 

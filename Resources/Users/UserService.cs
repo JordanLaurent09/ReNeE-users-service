@@ -1,4 +1,5 @@
 ﻿using users_service.Database.Entities;
+using users_service.Database.Repositories;
 using users_service.Database.Repositories.Interfaces;
 using users_service.Resources.Users.Interfaces;
 
@@ -6,10 +7,10 @@ namespace users_service.Resources.Users
 {
     public class UserService : IUserService
     {
-        private IRepository<User, string> _usersRepository;
+        private IRepository<User> _usersRepository;
         private ILogger<UserService> _logger;
 
-        public UserService(IRepository<User, string> usersRepository, ILogger<UserService> logger)
+        public UserService(IRepository<User> usersRepository, ILogger<UserService> logger)
         {
             _usersRepository = usersRepository;
             _logger = logger;
@@ -41,7 +42,8 @@ namespace users_service.Resources.Users
         public User GetByCredentials(string credential, string password)
         {
             _logger.LogInformation("Логин пользователя по {credential}", credential);
-            User user = _usersRepository.GetByCredentials(credential, password);
+            UserRepository repo = (UserRepository) _usersRepository;
+            User user = repo.GetByCredentials(credential, password);
             _logger.LogInformation("Получен пользователь с идентификатором {user.Id}", user.Id);
             return user;
         }
