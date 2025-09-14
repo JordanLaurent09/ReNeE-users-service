@@ -9,6 +9,9 @@ namespace users_service.Database.Context
     {
         public DbSet<User> users { get; set; }
         public DbSet<UsersPerformers> usersPerformers { get; set; }
+        public DbSet<UsersSongs> usersSongs { get; set; }
+        public DbSet<UsersAlbums> usersAlbums { get; set; }
+        public DbSet<Photo> photos { get; set; }
 
         public ApplicationDbContext(DbContextOptions options): base(options)
         {
@@ -33,6 +36,14 @@ namespace users_service.Database.Context
                 Entity<User>()
                 .Property(e => e.Role)
                 .HasConversion(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.EnumToStringConverter<Role>());
+
+            modelBuilder.
+                Entity<User>()
+                .HasMany(e => e.Photos)
+                .WithOne(e => e.User)
+                .HasForeignKey(e => e.UserId)
+                .IsRequired(false);
+
         }
     }
 }

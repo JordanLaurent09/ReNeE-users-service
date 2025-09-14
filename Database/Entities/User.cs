@@ -22,6 +22,9 @@ namespace users_service.Database.Entities
         [Column("email")]
         public string? Email { get; set; }
 
+        [Column("photos")]
+        public ICollection<Photo> Photos { get; } = new List<Photo>();
+
         [Column("sex")]
         public Sex Sex { get; set; }
 

@@ -38,8 +38,12 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IRepository<UsersPerformers>, UsersPerformersRepository>();
+builder.Services.AddScoped<IRepository<UsersAlbums>, UsersAlbumsRepository>();
+builder.Services.AddScoped<IRepository<UsersSongs>, UsersSongsRepository>();
+builder.Services.AddScoped<IRepository<Photo>, PhotoRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUsersPerformersService, UsersPerformersService>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 
 WebApplication app = builder.Build();
 

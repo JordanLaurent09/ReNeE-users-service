@@ -13,11 +13,13 @@ namespace users_service.Resources.Users
     {
         private IUserService _userService;
         private IUsersPerformersService _usersPerformersService;
+        private IPhotoService _photoService;
 
-        public UsersController(IUserService userService, IUsersPerformersService usersPerformersService)
+        public UsersController(IUserService userService, IUsersPerformersService usersPerformersService, IPhotoService photoService)
         {
             _userService = userService;
             _usersPerformersService = usersPerformersService;
+            _photoService = photoService;
         }
 
         /// <summary>
@@ -219,7 +221,7 @@ namespace users_service.Resources.Users
         {
             string result = _usersPerformersService.CreateNew(entity);
 
-            return Created("", entity);
+            return Created(result, entity);
         }
 
         [HttpGet]
@@ -229,6 +231,28 @@ namespace users_service.Resources.Users
             IEnumerable<int> indexes = _usersPerformersService.GetUserPerformersId(userId);
 
             return Ok(indexes);
+        }
+
+
+        // Routes for user's photos
+
+        [HttpGet]
+        [Route("photos")]
+        public IActionResult GetPhotos([FromQuery] int userId, [FromQuery] int performerId)
+        {                       
+            IEnumerable<string> photos = _photoService.GetPerformerPhotos(userId, performerId);
+
+            return Ok(photos);
+        }
+
+        [HttpPost]
+        [Route("newPhoto")]
+        public IActionResult AddPhoto([FromBody] Photo entity)
+        {           
+
+            string result = _photoService.CreateNew(entity);
+
+            return Created("", entity);
         }
     }
 }
