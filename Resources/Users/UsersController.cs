@@ -13,12 +13,21 @@ namespace users_service.Resources.Users
     {
         private IUserService _userService;
         private IUsersPerformersService _usersPerformersService;
+        private IUsersAlbumsService _usersAlbumsService;
+        private IUsersSongsService _usersSongsService;
         private IPhotoService _photoService;
 
-        public UsersController(IUserService userService, IUsersPerformersService usersPerformersService, IPhotoService photoService)
+        public UsersController(
+            IUserService userService, 
+            IUsersPerformersService usersPerformersService, 
+            IUsersAlbumsService usersAlbumsService, 
+            IUsersSongsService usersSongsService,
+            IPhotoService photoService)
         {
             _userService = userService;
             _usersPerformersService = usersPerformersService;
+            _usersAlbumsService = usersAlbumsService;
+            _usersSongsService = usersSongsService;
             _photoService = photoService;
         }
 
@@ -245,6 +254,15 @@ namespace users_service.Resources.Users
             return Ok(photos);
         }
 
+        [HttpGet]
+        [Route("allPhotos")]
+        public IActionResult GetAllPhotos()
+        {
+            IEnumerable<Photo> photos = _photoService.GetAll();
+
+            return Ok(photos);
+        }
+
         [HttpPost]
         [Route("newPhoto")]
         public IActionResult AddPhoto([FromBody] Photo entity)
@@ -252,7 +270,58 @@ namespace users_service.Resources.Users
 
             string result = _photoService.CreateNew(entity);
 
-            return Created("", entity);
+            return Created(result, entity);
+        }
+
+        [HttpDelete]
+        [Route("deletePhoto/{photoId:int}")]
+        public IActionResult DeletePhoto(int photoId)
+        {
+            _photoService.Delete(photoId);
+
+            return Ok("Photo has been deleted");
+        }
+
+
+        // Routes for albums of every user
+
+        [HttpGet]
+        [Route("albums")]
+        public IActionResult GetAlbums([FromQuery] int userId, [FromQuery] int performerId)
+        {
+            IEnumerable<int> albums = _usersAlbumsService.GetAlbumsIds(userId, performerId);
+
+            return Ok(albums);
+        }
+
+        [HttpPost]
+        [Route("newAlbum")]
+        public IActionResult AddAlbum([FromBody] UsersAlbums entity)
+        {
+            string result = _usersAlbumsService.CreateNew(entity);
+
+            return Created(result, entity);
+        }
+
+
+        // Routes for songs of every user
+
+        [HttpGet]
+        [Route("songs")]
+        public IActionResult GetSongs([FromQuery] int userId, [FromQuery] int performerId)
+        {
+            IEnumerable<int> songs = _usersSongsService.GetSongsIds(userId, performerId);
+
+            return Ok(songs);
+        }
+
+        [HttpPost]
+        [Route("newSong")]
+        public IActionResult AddSong([FromBody] UsersSongs entity)
+        {
+            string result = _usersSongsService.CreateNew(entity);
+
+            return Created(result, entity); 
         }
     }
 }

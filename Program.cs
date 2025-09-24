@@ -43,6 +43,8 @@ builder.Services.AddScoped<IRepository<UsersSongs>, UsersSongsRepository>();
 builder.Services.AddScoped<IRepository<Photo>, PhotoRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUsersPerformersService, UsersPerformersService>();
+builder.Services.AddScoped<IUsersSongsService, UsersSongsService>();
+builder.Services.AddScoped<IUsersAlbumsService, UsersAlbumsService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 
 WebApplication app = builder.Build();
