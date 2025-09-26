@@ -10,6 +10,7 @@ namespace users_service.Resources.Users.Interfaces
 
         void Delete(int id);
 
+        void DeleteByIds(int userId, int performerId);
 
         IEnumerable<Photo> GetAll();
 
@@ -17,7 +18,7 @@ namespace users_service.Resources.Users.Interfaces
         Photo GetById(int id);
 
 
-        IEnumerable<string> GetPerformerPhotos(int userId, int performerId);
+        IEnumerable<Photo> GetPerformerPhotos(int userId, int performerId);
 
 
         void Update(Photo entity);

@@ -242,6 +242,19 @@ namespace users_service.Resources.Users
             return Ok(indexes);
         }
 
+        [HttpDelete]
+        [Route("deletePerformer")]
+        public IActionResult DeleteFavoritePerformer([FromQuery] int userId, [FromQuery] int performerId)
+        {
+            _usersPerformersService.DeleteByIds(userId, performerId);
+
+            _photoService.DeleteByIds(userId, performerId);
+
+            _usersAlbumsService.DeleteByIds(userId, performerId);
+
+            return Ok("Performer and all info successfully removed");
+        }
+
 
         // Routes for user's photos
 
@@ -249,7 +262,7 @@ namespace users_service.Resources.Users
         [Route("photos")]
         public IActionResult GetPhotos([FromQuery] int userId, [FromQuery] int performerId)
         {                       
-            IEnumerable<string> photos = _photoService.GetPerformerPhotos(userId, performerId);
+            IEnumerable<Photo> photos = _photoService.GetPerformerPhotos(userId, performerId);
 
             return Ok(photos);
         }
@@ -301,6 +314,15 @@ namespace users_service.Resources.Users
             string result = _usersAlbumsService.CreateNew(entity);
 
             return Created(result, entity);
+        }
+
+        [HttpDelete]
+        [Route("deleteAlbum/{albumId:int}")]
+        public IActionResult DeleteAlbum(int albumId)
+        {
+            _usersAlbumsService.Delete(albumId);
+
+            return Ok("Album successfully deleted");
         }
 
 

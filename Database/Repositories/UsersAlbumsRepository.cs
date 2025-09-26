@@ -31,6 +31,14 @@ namespace users_service.Database.Repositories
             _context.SaveChanges();
         }
 
+        public void DeleteByIds(int userId, int performerId)
+        {
+            IQueryable<UsersAlbums> albums = _context.usersAlbums.Where(album => album.PerformerId == performerId && album.UserId == userId);
+
+            _context.usersAlbums.RemoveRange(albums);
+            _context.SaveChanges();
+        }
+
         public IEnumerable<UsersAlbums> GetAll()
         {
             IEnumerable<UsersAlbums> usersAlbums = _context.usersAlbums;

@@ -38,6 +38,14 @@ namespace users_service.Database.Repositories
             _context.SaveChanges();
         }
 
+        public void DeleteByIds(int userId, int performerId)
+        {
+            IQueryable<Photo> photos = _context.photos.Where(photo => photo.PerformerId == performerId && photo.UserId == userId);
+
+            _context.photos.RemoveRange(photos);
+            _context.SaveChanges();
+        }
+
         public IEnumerable<Photo> GetAll()
         {
             IEnumerable<Photo> photos = _context.photos;
@@ -52,9 +60,9 @@ namespace users_service.Database.Repositories
             return photo;
         }
 
-        public IEnumerable<string> GetPerformerPhotos(int userId, int performerId)
+        public IEnumerable<Photo> GetPerformerPhotos(int userId, int performerId)
         {
-            IEnumerable<string> photos = _context.photos.Where(p => p.UserId == userId &&  p.PerformerId == performerId).Select(p => p.Image)!;
+            IEnumerable<Photo> photos = _context.photos.Where(p => p.UserId == userId &&  p.PerformerId == performerId);
 
             return photos;
         }

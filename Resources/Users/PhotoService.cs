@@ -34,6 +34,19 @@ namespace users_service.Resources.Users
             }
         }
 
+        public void DeleteByIds(int userId, int performerId)
+        {
+            try
+            {
+                PhotoRepository repo = (PhotoRepository)_photosRepository;
+                repo.DeleteByIds(userId, performerId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+        }
+
         public IEnumerable<Photo> GetAll()
         {
             IEnumerable<Photo> photos = _photosRepository.GetAll();
@@ -48,9 +61,9 @@ namespace users_service.Resources.Users
             return photo;
         }
 
-        public IEnumerable<string> GetPerformerPhotos(int userId, int performerId)
+        public IEnumerable<Photo> GetPerformerPhotos(int userId, int performerId)
         {
-            IEnumerable<string> images = [];
+            IEnumerable<Photo> images = [];
 
             try
             {
