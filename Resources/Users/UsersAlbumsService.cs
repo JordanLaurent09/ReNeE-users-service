@@ -34,6 +34,19 @@ namespace users_service.Resources.Users
             }
         }
 
+        public void DeleteByAlbumId(int albumId, int userId)
+        {
+            try
+            {
+                UsersAlbumsRepository repo = (UsersAlbumsRepository)_usersAlbumsRepository;
+                repo.DeleteByAlbumId(albumId, userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+        }
+
         public void DeleteByIds(int userId, int performerId)
         {
             try

@@ -9,6 +9,8 @@ namespace users_service.Resources.Users.Interfaces
 
         void Delete(int id);
 
+        void DeleteByAlbumId(int albumId, int userId);
+
         void DeleteByIds(int userId, int performerId);
 
         IEnumerable<UsersAlbums> GetAll();

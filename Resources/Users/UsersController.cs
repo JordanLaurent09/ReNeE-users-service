@@ -317,6 +317,15 @@ namespace users_service.Resources.Users
         }
 
         [HttpDelete]
+        [Route("deleteFavoriteAlbum")]
+        public IActionResult DeleteFavoriteAlbum([FromQuery] int albumId, [FromQuery] int userId)
+        {
+            _usersAlbumsService.DeleteByAlbumId(albumId, userId);
+
+            return Ok("Album successfully deleted");
+        }
+
+        [HttpDelete]
         [Route("deleteAlbum/{albumId:int}")]
         public IActionResult DeleteAlbum(int albumId)
         {

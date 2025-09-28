@@ -25,8 +25,15 @@ namespace users_service.Database.Repositories
 
         public void Delete(int id)
         {
-            UsersAlbums album = _context.usersAlbums.FirstOrDefault(album => album.Id == id) ?? throw new Exception("Specified data not found");
+            UsersAlbums album = _context.usersAlbums.FirstOrDefault(album => album.AlbumId == id) ?? throw new Exception("Specified data not found");
+            Console.WriteLine(album.AlbumId);
+            _context.usersAlbums.Remove(album);
+            _context.SaveChanges();
+        }
 
+        public void DeleteByAlbumId(int albumId, int userId)
+        {
+            UsersAlbums album = _context.usersAlbums.FirstOrDefault(album => album.UserId == userId && album.AlbumId == albumId) ?? throw new Exception("Specified data not found");
             _context.usersAlbums.Remove(album);
             _context.SaveChanges();
         }
