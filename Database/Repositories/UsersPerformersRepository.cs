@@ -17,10 +17,18 @@ namespace users_service.Database.Repositories
 
         public string CreateNew(UsersPerformers entity)
         {
-            _context.usersPerformers.Add(entity);
-            _context.SaveChanges();
+            try
+            {
+                _context.usersPerformers.Add(entity);
+                _context.SaveChanges();
 
-            return "OK";
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                return "Error";
+            }
+            
         }
 
         public void Delete(int id)

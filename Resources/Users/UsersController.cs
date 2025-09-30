@@ -223,14 +223,40 @@ namespace users_service.Resources.Users
         }
 
         // Routes for performers of every user
-
+        ///<summary>
+        /// Add performer to user's favorites
+        ///</summary>
+        ///<param name="entity"></param>
+        ///<returns></returns>
+        ///<remarks>
+        /// 
+        /// {
+        ///     "userId": 1,
+        ///     "performerId": 1
+        /// }
+        /// 
+        ///</remarks>
+        ///<response code="200">Returns success message</response>
         [HttpPost]
         [Route("performer")]
         public IActionResult AddFavoritePerformer([FromBody] UsersPerformers entity)
         {
-            string result = _usersPerformersService.CreateNew(entity);
-
-            return Created(result, entity);
+            try
+            {
+                string result = _usersPerformersService.CreateNew(entity);
+                if (result == "OK")
+                {
+                    return Created(result, StatusCodes.Status201Created);
+                }
+                else 
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet]

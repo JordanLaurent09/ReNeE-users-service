@@ -8,17 +8,20 @@ namespace users_service.Resources.Users
     public class UsersPerformersService : IUsersPerformersService
     {
         private IRepository<UsersPerformers> _usersPerformersRepository;
+        private ILogger<UsersPerformersService> _logger;
 
 
-        public UsersPerformersService(IRepository<UsersPerformers> usersPerformersRepository)
+        public UsersPerformersService(IRepository<UsersPerformers> usersPerformersRepository, ILogger<UsersPerformersService> logger)
         {
             _usersPerformersRepository = usersPerformersRepository;
+            _logger = logger;
         }
 
         public string CreateNew(UsersPerformers entity)
         {
+            _logger.LogInformation("Добавление исполнителя с идентификатором {performerId} в избранное к пользователю с идентификатором {userId}", entity.PerformerId, entity.UserId);
             string result = _usersPerformersRepository.CreateNew(entity);
-
+            _logger.LogInformation("Ответ сервера: {ServerResponse}", result);
             return result;
         }
 
