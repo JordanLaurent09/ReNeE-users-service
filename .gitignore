@@ -7,3 +7,6 @@ bin
 nlog.config
 Logs
 Dockerfile
+
+.env
+.gitignore

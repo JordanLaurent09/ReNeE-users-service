@@ -222,7 +222,6 @@ namespace users_service.Resources.Users
 
         }
 
-        // Routes for performers of every user
         ///<summary>
         /// Add performer to user's favorites
         ///</summary>
@@ -237,7 +236,13 @@ namespace users_service.Resources.Users
         /// 
         ///</remarks>
         ///<response code="200">Returns success message</response>
+        ///<response code="400">If uncorrect request occurs</response>      
+        ///<response code="500">If server error occurs</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("performer")]
         public IActionResult AddFavoritePerformer([FromBody] UsersPerformers entity)
         {
@@ -250,7 +255,7 @@ namespace users_service.Resources.Users
                 }
                 else 
                 {
-                    return BadRequest(result);
+                    return BadRequest("Error");
                 }
             }
             catch (Exception ex)
@@ -259,7 +264,21 @@ namespace users_service.Resources.Users
             }
         }
 
+
+        /// <summary>
+        /// Get indexes of user's favorite performers
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <response code="200">Returns indexes array</response>
+        /// <response code="400">If bad response occurs</response>
+        /// <response code="404">If values didn't find</response>
+        /// <response code="500">If server error occurs</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("performers/{userId:int}")]
         public IActionResult GetPerfIndexes(int userId)
         {
@@ -268,7 +287,22 @@ namespace users_service.Resources.Users
             return Ok(indexes);
         }
 
-        [HttpDelete]
+        /// <summary>
+        /// Removes favorite user's performer
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="performerId"></param>
+        /// <returns></returns>
+        /// <response code="200">Returns success message</response>
+        /// <response code="400">If bad response occurs</response>
+        /// <response code="404">If favorite performer didn't find</response>
+        /// <response code="500">If server error occurs</response>
+        /// 
+        [HttpDelete] 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("deletePerformer")]
         public IActionResult DeleteFavoritePerformer([FromQuery] int userId, [FromQuery] int performerId)
         {
@@ -282,9 +316,22 @@ namespace users_service.Resources.Users
         }
 
 
-        // Routes for user's photos
 
-        [HttpGet]
+        /// <summary>
+        /// Return's array with user's photos
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="performerId"></param>
+        /// <returns></returns>
+        /// <response code="200">Returns photo array</response>
+        /// <response code="400">If bad response occurs</response>
+        /// <response code="404">If photos didn't find</response>
+        /// <response code="500">If server error occurs</response>
+        [HttpGet]       
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("photos")]
         public IActionResult GetPhotos([FromQuery] int userId, [FromQuery] int performerId)
         {                       
@@ -293,7 +340,18 @@ namespace users_service.Resources.Users
             return Ok(photos);
         }
 
-        [HttpGet]
+
+        /// <summary>
+        /// Get ALL photos in table (only admin use)
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Returns photo array or empty array</response>
+        /// <response code="400">If bad response occurs</response>
+        /// <response code="500">If server error occurs</response>
+        [HttpGet]       
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("allPhotos")]
         public IActionResult GetAllPhotos()
         {
@@ -302,7 +360,29 @@ namespace users_service.Resources.Users
             return Ok(photos);
         }
 
+
+        /// <summary>
+        /// Add new user's photo of favorite performer
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        ///<remarks>
+        ///
+        /// {
+        ///     performerId: 1,
+        ///     userId: 1,
+        ///     image: "text view of picture file"
+        /// }
+        /// 
+        ///</remarks> 
+        ///
+        /// <response code="200"> Returns success message</response>
+        /// <response code="400">If bad response occurs</response>
+        /// <response code="500">If server error occurs</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("newPhoto")]
         public IActionResult AddPhoto([FromBody] Photo entity)
         {           
@@ -312,7 +392,21 @@ namespace users_service.Resources.Users
             return Created(result, entity);
         }
 
+
+        /// <summary>
+        /// Removes chosen photo
+        /// </summary>
+        /// <param name="photoId"></param>
+        /// <returns></returns>
+        /// <response code="200"> Returns success message</response>
+        /// <response code="400">If bad response occurs</response>
+        /// <response code="404">If chosen photo didn't find</response>
+        /// <response code="500">If server error occurs</response>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("deletePhoto/{photoId:int}")]
         public IActionResult DeletePhoto(int photoId)
         {
@@ -322,9 +416,22 @@ namespace users_service.Resources.Users
         }
 
 
-        // Routes for albums of every user
 
-        [HttpGet]
+        /// <summary>
+        /// Get user's favorite albums indexes
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="performerId"></param>
+        /// <returns></returns>
+        /// <response code="200"> Returns array of albums indexes</response>
+        /// <response code="400">If bad response occurs</response>
+        /// <response code="404">If chosen photo didn't find</response>
+        /// <response code="500">If server error occurs</response>
+        [HttpGet]       
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("albums")]
         public IActionResult GetAlbums([FromQuery] int userId, [FromQuery] int performerId)
         {
@@ -333,7 +440,29 @@ namespace users_service.Resources.Users
             return Ok(albums);
         }
 
+
+        /// <summary>
+        /// Add album to user's favorites
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// <remarks>
+        /// 
+        /// {
+        ///     albumId: 1,
+        ///     userId: 1,
+        ///     performerId: 1
+        ///     
+        /// }
+        ///
+        /// </remarks>
+        /// <response code="200">Returns success message</response>
+        /// <response code="400">If uncorrect request occurs</response>      
+        /// <response code="500">If server error occurs</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("newAlbum")]
         public IActionResult AddAlbum([FromBody] UsersAlbums entity)
         {
@@ -342,7 +471,22 @@ namespace users_service.Resources.Users
             return Created(result, entity);
         }
 
+
+        /// <summary>
+        /// Removes user's favorite album
+        /// </summary>
+        /// <param name="albumId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <response code="200"> Returns success message</response>
+        /// <response code="400">If bad response occurs</response>
+        /// <response code="404">If chosen album didn't find</response>
+        /// <response code="500">If server error occurs</response>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("deleteFavoriteAlbum")]
         public IActionResult DeleteFavoriteAlbum([FromQuery] int albumId, [FromQuery] int userId)
         {
@@ -351,6 +495,11 @@ namespace users_service.Resources.Users
             return Ok("Album successfully deleted");
         }
 
+        /// <summary>
+        /// DEPRECATED METHOD
+        /// </summary>
+        /// <param name="albumId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("deleteAlbum/{albumId:int}")]
         public IActionResult DeleteAlbum(int albumId)
@@ -361,8 +510,8 @@ namespace users_service.Resources.Users
         }
 
 
-        // Routes for songs of every user
-
+        // DANGER ZONE
+        
         [HttpGet]
         [Route("songs")]
         public IActionResult GetSongs([FromQuery] int userId, [FromQuery] int performerId)
